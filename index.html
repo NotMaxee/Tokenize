@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="/data/favicon.png">
+
+  <title>Tokenize</title>
+
+  <!-- Meta -->
+  <meta content="Tokenize" property="og:title" />
+  <meta content="A tokenizer for virtual tabletops." property="og:description" />
+  <meta content="https://tokens.downcorp.tf" property="og:url" />
+  <meta content="https://tokens.downcorp.tf/data/favicon.png" property="og:image" />
+  <meta content="#e26682" data-react-helmet="true" name="theme-color" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/bulma.css">
+  <link rel="stylesheet" href="css/bulma-fixes.css">
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- JS -->
+  <script src="js/3rd-party/fontawesome.js"></script>
+  <script src="js/3rd-party/hermite.js"></script>
+  <script src="js/3rd-party/jszip.js"></script>
+  <script src="js/main.js" type="module"></script>
+
+</head>
+
+<body>
+
+  <!-- Token adjustment modal -->
+  <div id="modal-adjust" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      <div class="box">
+        <p class="title">Adjust Image</p>
+        <p class="subtitle">Drag and zoom to adjust the token.</p>
+
+        <canvas id="canvas-adjust" class="adjust-canvas" width="768" height="512"></canvas>
+
+        <div class="field is-grouped">
+          <span class="icon is-large"><i class="fa fa-lg fa-search-minus" aria-hidden="true"></i></span>
+          <input id="range-adjust" class="adjust-range" type="range" min="0" max="150" step="1" value="0">
+          <span class="icon is-large"><i class="fa fa-2x fa-search-plus" aria-hidden="true"></i>
+          </span>
+        </div>
+
+        <div class="field is-grouped is-justify-content-right">
+          <div class="control">
+            <button id="button-cancel-adjust" class="button w150 is-danger">
+              <span class="icon is-small"><i class="fa fa-undo" aria-hidden="true"></i></span>
+              <span>Cancel</span>
+            </button>
+          </div>
+          <div class="control">
+            <button id="button-apply-adjust" class="button is-info w150">
+              <span class="icon is-small"><i class="fa fa-save" aria-hidden="true"></i></span>
+              <span>Apply</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Progressbar -->
+
+  <div class="section">
+
+    <!-- Welcome Section-->
+    <div class="container">
+      <div class="columns is-mobile is-multiline is-4">
+
+        <!-- Title -->
+        <div class="column is-full">
+          <p class="title">Tokenize</p>
+          <p class="subtitle">Your one-stop shop for transparent VTT tokens.</p>
+          <div class="content">
+            <p>
+              To get started, select some images you want to turn into tokens.
+              Then, hit <i>Generate Tokens</i> to start generating tokens.
+            </p>
+          </div>
+        </div>
+
+        <!-- File Upload -->
+        <div class="column is-half-desktop is-full-touch">
+          <p class="title">Files</p>
+
+          <div class="content">
+            <p>Select files to turn into tokens here.</p>
+
+            <div class="file has-name is-fullwidth mb-2">
+              <label class="file-label">
+                <input id="input-files" class="file-input" type="file" accept=".png,.jpg,.jpeg,.gif,.webp" multiple>
+                <span class="file-cta">
+                  <span class="file-icon">
+                    <i class="fas fa-upload"></i>
+                  </span>
+                  <span class="file-label">
+                    Choose files…
+                  </span>
+                </span>
+                <span id="input-files-info" class="file-name">
+                  No files selected.
+                </span>
+              </label>
+            </div>
+
+            <div class="buttons mb-2">
+              <button id="button-generate" class="button is-info is-half">
+                <span class="icon is-small"><i class="fa fa-cogs" aria-hidden="true"></i></span>
+                <span>Generate Tokens</span>
+              </button>
+              <button id="button-clear-files" class="button is-danger is-half">
+                <span class="icon is-small"><i class="fa fa-trash" aria-hidden="true"></i></span>
+                <span>Clear Files</span>
+              </button>
+            </div>
+
+            <div class="buttons mb-2">
+              <button id="button-download" class="button is-info is-half">
+                <span class="icon is-small"><i class="fa fa-download" aria-hidden="true"></i></span>
+                <span>Download Tokens</span>
+              </button>
+              <button id="button-delete-tokens" class="button is-danger is-half">
+                <span class="icon is-small"><i class="fa fa-trash" aria-hidden="true"></i></span>
+                <span>Delete Tokens</span>
+              </button>
+            </div>
+
+            <progress id="progress" class="progress mb-2 is-info invisible" value="0" max="100"></progress>
+
+          </div>
+        </div>
+
+        <!-- Settings -->
+        <div class="column is-half-desktop is-full-touch">
+          <p class="title">Settings</p>
+          <div class="content">
+
+            <p>Configure how Tokenize behaves here.</p>
+
+            <div class="field">
+              <label class="label">Generation Behavior</label>
+              <div class="control">
+                <label class="checkbox">
+                  <input id="check-generate-immediately" type="checkbox" />
+                  Generate tokens immediately.
+                </label>
+              </div>
+
+              <div class="control">
+                <label class="checkbox">
+                  <input id="check-download-immediately" type="checkbox" />
+                  Download tokens immediately.
+                </label>
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="control">
+                <label class="label">Adjust Token Position</label>
+                <label class="radio">
+                  <input id="radio-adjust-never" type="radio" name="adjust-token" value="0" />
+                  Never
+                </label>
+                <label class="radio">
+                  <input id="radio-adjust-always" type="radio" name="adjust-token" value="1" />
+                  Always
+                </label>
+                <label class="radio">
+                  <input id="radio-adjust-non-square" type="radio" name="adjust-token" value="2" />
+                  Only for non-square images
+                </label>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label">Default Token Background</label>
+              <div class="control">
+                <div class="color-wrapper">
+                  <input id="input-background-colour" type="color" value="#000000" />
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Token Preview -->
+        <div class="column box is-full">
+          <p class="title">Tokens</p>
+          <p>View your generated tokens here.</p>
+
+          <div class="content">
+
+            <div id="preview-container" class="previews">
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page footer -->
+  <footer class="footer">
+    <div class="content has-text-centered">
+      <div class="columns is-mobile is-multiline">
+
+        <div class="column is-4-desktop is-12-mobile">
+          <strong>Tokenize</strong> by <a href="https://notmaxee.github.io/">Maxee</a>.
+        </div>
+
+        <div class="column is-4-desktop is-12-mobile">
+          Made with <a href="https://bulma.io/">Bulma CSS</a>.
+        </div>
+
+        <div class="column is-4-desktop is-12-mobile">
+          <a href="https://github.com/NotMaxee/Tokenize">View on GitHub</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>
