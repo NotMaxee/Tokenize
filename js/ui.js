@@ -11,6 +11,8 @@ export var radioAdjustNever;
 export var radioAdjustAlways;
 export var radioAdjustNonSquare;
 export var inputBackgroundColour;
+export var inputBackgroundColourLabel;
+export var inputBackgroundColourInfo;
 export var buttonGenerate;
 export var buttonClearFiles;
 export var buttonDownload;
@@ -22,6 +24,8 @@ export var canvasAdjust;
 export var rangeAdjust;
 export var buttonCancelAdjust;
 export var buttonApplyAdjust;
+
+export var buttonLightswitch;
 
 export var progressbar;
 
@@ -45,6 +49,8 @@ export function init() {
     radioAdjustNonSquare = getElement("radio-adjust-non-square");
 
     inputBackgroundColour = getElement("input-background-colour");
+    inputBackgroundColourLabel = getElement("input-background-colour-label");
+    inputBackgroundColourInfo = getElement("input-background-colour-info");
 
     buttonGenerate = getElement("button-generate");
     buttonClearFiles = getElement("button-clear-files");
@@ -59,12 +65,14 @@ export function init() {
     buttonCancelAdjust = getElement("button-cancel-adjust");
     buttonApplyAdjust = getElement("button-apply-adjust");
 
+    buttonLightswitch = getElement("button-lightswitch");
     progressbar = getElement("progress");
 
     // Update states.
     updateButtonDisabledState();
     updateCheckedStates();
     updateFileInputInfo();
+    updateColourInput();
 }
 
 document.addEventListener("DOMContentLoaded", init);
@@ -114,7 +122,6 @@ function updateCheckedStates() {
 
     // Update background colour input.
     inputBackgroundColour.value = config.defaultTokenBackground;
-
 }
 
 /**
@@ -130,6 +137,15 @@ export function updateFileInputInfo() {
         }
         inputFilesInfo.textContent = files.join(", ");
     }
+}
+
+/**
+ * Update the colour input to match the currently configured value.
+ */
+export function updateColourInput() {
+    inputBackgroundColourInfo.textContent = inputBackgroundColour.value;inputBackgroundColourLabel.style.backgroundColor = inputBackgroundColour.value;
+    inputBackgroundColourLabel.style.color = inputBackgroundColour.value;
+    inputBackgroundColourLabel.style.backgroundColor = inputBackgroundColour.value;
 }
 
 export function showProgressbar(current, maximum) {

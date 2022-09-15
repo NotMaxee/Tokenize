@@ -16,7 +16,7 @@ export var downloadTokensImmediately = false;
 /**
  * 0 = never, 1 = always, 2 = non-square
  */
-export var adjustTokenPositionMode = 0;
+export var adjustTokenPositionMode = 1;
 
 /**
  * Hex colour code.

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 
 <head>
   <meta charset="UTF-8">
@@ -10,15 +10,14 @@
   <title>Tokenize</title>
 
   <!-- Meta -->
-  <meta content="Tokenize" property="og:title" />
-  <meta content="A tokenizer for virtual tabletops." property="og:description" />
-  <meta content="https://tokens.downcorp.tf" property="og:url" />
-  <meta content="https://tokens.downcorp.tf/data/favicon.png" property="og:image" />
-  <meta content="#e26682" data-react-helmet="true" name="theme-color" />
+  <meta property="og:title" content="Tokenize" />
+  <meta property="og:description" content="A tokenizer for virtual tabletops." />
+  <meta property="og:url" content="https://notmaxee.github.io/Tokenize/" />
+  <meta property="og:image" content="https://notmaxee.github.io/Tokenize/data/favicon.png" />
+  <meta name="theme-color" content="#e26682" data-react-helmet="true" />
 
   <!-- CSS -->
-  <link rel="stylesheet" href="css/bulma.css">
-  <link rel="stylesheet" href="css/bulma-fixes.css">
+  <link rel="stylesheet" href="css/minstyle.css">
   <link rel="stylesheet" href="css/style.css">
 
   <!-- JS -->
@@ -32,200 +31,183 @@
 <body>
 
   <!-- Token adjustment modal -->
-  <div id="modal-adjust" class="modal">
-    <div class="modal-background"></div>
+
+  <div id="modal-adjust" class="modal invisible">
     <div class="modal-content">
-      <div class="box">
-        <p class="title">Adjust Image</p>
-        <p class="subtitle">Drag and zoom to adjust the token.</p>
+      <h4>Adjust Image</h4>
+      <p>Drag and zoom to adjust the token.</p>
 
-        <canvas id="canvas-adjust" class="adjust-canvas" width="768" height="512"></canvas>
+      <canvas id="canvas-adjust" class="adjust-canvas" width="768" height="512"></canvas>
 
-        <div class="field is-grouped">
-          <span class="icon is-large"><i class="fa fa-lg fa-search-minus" aria-hidden="true"></i></span>
-          <input id="range-adjust" class="adjust-range" type="range" min="0" max="150" step="1" value="0">
-          <span class="icon is-large"><i class="fa fa-2x fa-search-plus" aria-hidden="true"></i>
-          </span>
-        </div>
+      <div class="ms-form-group ms-display-flex ms-flex-align-items-center">
+        <span class="icon is-large"><i class="fa fa-lg fa-search-minus" aria-hidden="true"></i></span>
+        <input id="range-adjust" class="adjust-range" type="range" min="0" max="150" step="1" value="0">
+        <span class="icon is-large"><i class="fa fa-2x fa-search-plus" aria-hidden="true"></i></span>
+      </div>
 
-        <div class="field is-grouped is-justify-content-right">
-          <div class="control">
-            <button id="button-cancel-adjust" class="button w150 is-danger">
-              <span class="icon is-small"><i class="fa fa-undo" aria-hidden="true"></i></span>
-              <span>Cancel</span>
-            </button>
-          </div>
-          <div class="control">
-            <button id="button-apply-adjust" class="button is-info w150">
-              <span class="icon is-small"><i class="fa fa-save" aria-hidden="true"></i></span>
-              <span>Apply</span>
-            </button>
-          </div>
-        </div>
+      <div class="ms-btn-group ms-fullwidth">
+        <button id="button-cancel-adjust" class="button ms-primary">
+          <span class="icon is-small"><i class="fa fa-undo" aria-hidden="true"></i></span>
+          <span>Cancel</span>
+        </button>
+        <button id="button-apply-adjust" class="button ms-secondary">
+          <span class="icon is-small"><i class="fa fa-save" aria-hidden="true"></i></span>
+          <span>Apply</span>
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- Progressbar -->
+  <!-- Title and introduction -->
 
-  <div class="section">
+  <div class="container">
+    <h1 class="ms-fullwidth">
+      <div class="ms-avatar"><img src="/data/favicon.png"></div>
+      <span class="ms-text-primary">Tokenize</span>
 
-    <!-- Welcome Section-->
-    <div class="container">
-      <div class="columns is-mobile is-multiline is-4">
+      <span class="lightswitch-container">
+        <button id="button-lightswitch" class="lightswitch ms-rounded" title="Switch between dark and light mode.">
+          <span class="show-on-light"><i class="fa fa-sun" aria-hidden="true"></i></span>
+          <span class="show-on-light">Light</span>
 
-        <!-- Title -->
-        <div class="column is-full">
-          <p class="title">Tokenize</p>
-          <p class="subtitle">Your one-stop shop for transparent VTT tokens.</p>
-          <div class="content">
-            <p>
-              To get started, select some images you want to turn into tokens.
-              Then, hit <i>Generate Tokens</i> to start generating tokens.
-            </p>
-          </div>
+          <span class="show-on-dark"><i class="fa fa-moon" aria-hidden="true"></i></span>
+          <span class="show-on-dark">Dark</span>
+        </button>
+      </span>
+
+    </h1>
+    <p>Your one-stop shop for transparent VTT tokens.</p>
+    <hr />
+  </div>
+
+  <div class="container">
+    <div class="row">
+
+      <!-- Files -->
+      <div class="col-lg-6 col-md-12">
+
+        <h4>Files</h4>
+        <p>Select files to turn into tokens here.</p>
+
+        <!-- File Input -->
+
+        <div class="file-input">
+          <label for="input-files" class="file-input-label">
+            <input id="input-files" type="file" accept=".png,.jpg,.jpeg,.gif,.webp" multiple>
+            <span><i class="fas fa-upload"></i></span>
+            Choose files…
+          </label>
+          <span id="input-files-info" class="file-input-info">No files selected.</span>
         </div>
 
-        <!-- File Upload -->
-        <div class="column is-half-desktop is-full-touch">
-          <p class="title">Files</p>
+        <!-- Buttons -->
 
-          <div class="content">
-            <p>Select files to turn into tokens here.</p>
+        <div class="ms-btn-group ms-fullwidth">
+          <button id="button-generate" class="ms-primary">
+            <span><i class="fa fa-cogs" aria-hidden="true"></i></span>
+            <span>Generate Tokens</span>
+          </button>
 
-            <div class="file has-name is-fullwidth mb-2">
-              <label class="file-label">
-                <input id="input-files" class="file-input" type="file" accept=".png,.jpg,.jpeg,.gif,.webp" multiple>
-                <span class="file-cta">
-                  <span class="file-icon">
-                    <i class="fas fa-upload"></i>
-                  </span>
-                  <span class="file-label">
-                    Choose files…
-                  </span>
-                </span>
-                <span id="input-files-info" class="file-name">
-                  No files selected.
-                </span>
+          <button id="button-clear-files" class="button ms-secondary">
+            <span><i class="fa fa-trash" aria-hidden="true"></i></span>
+            <span>Clear Files</span>
+          </button>
+        </div>
+
+        <div class="ms-btn-group ms-fullwidth">
+          <button id="button-download" class="button ms-primary">
+            <span><i class="fa fa-download" aria-hidden="true"></i></span>
+            <span>Download Tokens</span>
+          </button>
+
+          <button id="button-delete-tokens" class="button ms-secondary">
+            <span><i class="fa fa-trash" aria-hidden="true"></i></span>
+            <span>Delete Tokens</span>
+          </button>
+        </div>
+
+        <progress id="progress" class="invisible" value="0" max="100"></progress>
+        <!--  invisible-->
+
+      </div>
+
+      <!-- Settings -->
+
+      <div class="col-lg-6 col-md-12">
+        <h4>Settings</h4>
+        <p>Configure how Tokenize behaves here.</p>
+
+        <div class="row">
+
+          <div class="col-md-6 col-12">
+            <p>Generation Behavior</p>
+            <div class="ms-form-group">
+              <label for="check-generate-immediately">
+                <input id="check-generate-immediately" type="checkbox" />
+                Generate tokens immediately.
+              </label>
+              <label for="check-download-immediately">
+                <input id="check-download-immediately" type="checkbox" />
+                Download tokens immediately.
               </label>
             </div>
+          </div>
 
-            <div class="buttons mb-2">
-              <button id="button-generate" class="button is-info is-half">
-                <span class="icon is-small"><i class="fa fa-cogs" aria-hidden="true"></i></span>
-                <span>Generate Tokens</span>
-              </button>
-              <button id="button-clear-files" class="button is-danger is-half">
-                <span class="icon is-small"><i class="fa fa-trash" aria-hidden="true"></i></span>
-                <span>Clear Files</span>
-              </button>
+          <div class="col-md-6 col-12">
+            <p>Adjust Token Position</p>
+            <div class="ms-form-group">
+              <label for="radio-adjust-always">
+                <input id="radio-adjust-always" type="radio" name="adjust-token" value="1" />
+                Always
+              </label>
+              <label for="radio-adjust-non-square">
+                <input id="radio-adjust-non-square" type="radio" name="adjust-token" value="2" />
+                Only non-square images
+              </label>
+              <label for="radio-adjust-never">
+                <input id="radio-adjust-never" type="radio" name="adjust-token" value="0" />
+                Never
+              </label>
             </div>
+          </div>
 
-            <div class="buttons mb-2">
-              <button id="button-download" class="button is-info is-half">
-                <span class="icon is-small"><i class="fa fa-download" aria-hidden="true"></i></span>
-                <span>Download Tokens</span>
-              </button>
-              <button id="button-delete-tokens" class="button is-danger is-half">
-                <span class="icon is-small"><i class="fa fa-trash" aria-hidden="true"></i></span>
-                <span>Delete Tokens</span>
-              </button>
-            </div>
+          <div class="col-md-6 col-12">
+            <p>Default Token Background</p>
 
-            <progress id="progress" class="progress mb-2 is-info invisible" value="0" max="100"></progress>
-
+            <label id="input-background-colour-label" for="input-background-colour" class="colour-label">
+              <input id="input-background-colour" type="color" value="#000000" />
+              <span><i class="fa fa-paint-brush colour-info" aria-hidden="true"></i></span>
+              <span id="input-background-colour-info" class="colour-info">#??????</span>
+            </label>
           </div>
         </div>
 
-        <!-- Settings -->
-        <div class="column is-half-desktop is-full-touch">
-          <p class="title">Settings</p>
-          <div class="content">
+      </div>
 
-            <p>Configure how Tokenize behaves here.</p>
-
-            <div class="field">
-              <label class="label">Generation Behavior</label>
-              <div class="control">
-                <label class="checkbox">
-                  <input id="check-generate-immediately" type="checkbox" />
-                  Generate tokens immediately.
-                </label>
-              </div>
-
-              <div class="control">
-                <label class="checkbox">
-                  <input id="check-download-immediately" type="checkbox" />
-                  Download tokens immediately.
-                </label>
-              </div>
-            </div>
-
-            <div class="field">
-              <div class="control">
-                <label class="label">Adjust Token Position</label>
-                <label class="radio">
-                  <input id="radio-adjust-never" type="radio" name="adjust-token" value="0" />
-                  Never
-                </label>
-                <label class="radio">
-                  <input id="radio-adjust-always" type="radio" name="adjust-token" value="1" />
-                  Always
-                </label>
-                <label class="radio">
-                  <input id="radio-adjust-non-square" type="radio" name="adjust-token" value="2" />
-                  Only for non-square images
-                </label>
-              </div>
-            </div>
-
-            <div class="field">
-              <label class="label">Default Token Background</label>
-              <div class="control">
-                <div class="color-wrapper">
-                  <input id="input-background-colour" type="color" value="#000000" />
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-
-        <!-- Token Preview -->
-        <div class="column box is-full">
-          <p class="title">Tokens</p>
-          <p>View your generated tokens here.</p>
-
-          <div class="content">
-
-            <div id="preview-container" class="previews">
-            </div>
-
-          </div>
-        </div>
+      <!-- Tokens-->
+      <div class="col-lg-12">
+        <hr />
+        <h4>Tokens</h4>
+        <p class="subtitle">View your finished tokens here.</p>
+        <hr />
+        <div id="preview-container" class="previews"></div>
       </div>
     </div>
   </div>
 
-  <!-- Page footer -->
-  <footer class="footer">
-    <div class="content has-text-centered">
-      <div class="columns is-mobile is-multiline">
+  <!-- Footer -->
 
-        <div class="column is-4-desktop is-12-mobile">
-          <strong>Tokenize</strong> by <a href="https://notmaxee.github.io/">Maxee</a>.
-        </div>
+  <div class="spacer"></div>
 
-        <div class="column is-4-desktop is-12-mobile">
-          Made with <a href="https://bulma.io/">Bulma CSS</a>.
-        </div>
-
-        <div class="column is-4-desktop is-12-mobile">
-          <a href="https://github.com/NotMaxee/Tokenize">View on GitHub</a>
-        </div>
-      </div>
+  <footer class="ms-footer ms-small">
+    <div class="container">
+      Tokenize by <a href="https://notmaxee.github.io/">Maxee</a>
+      •
+      Made with <a href="https://minstyle.io/">minstyle.io</a>
+      •
+      <a href="https://github.com/NotMaxee/Tokenize">View on GitHub</a>
     </div>
+
   </footer>
 
 </body>

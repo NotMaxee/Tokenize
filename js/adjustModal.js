@@ -8,14 +8,14 @@ import * as utils from "./utils.js";
  * Show the modal.
  */
 export function show() {
-  ui.modalAdjust.classList.add("is-active");
+  ui.modalAdjust.classList.remove("invisible");
 }
 
 /**
  * Hide the modal.
  */
 export function hide() {
-  ui.modalAdjust.classList.remove("is-active");
+  ui.modalAdjust.classList.add("invisible");
 }
 
 /**

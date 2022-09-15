@@ -445,13 +445,13 @@ function createTokenPreview(token) {
 
   let buttonSave = document.createElement("button");
   buttonSave.classList.add("button");
-  buttonSave.classList.add("is-info");
+  buttonSave.classList.add("ms-primary");
   buttonSave.textContent = "Save";
   buttonSave.onclick = () => downloadToken(token.uid);
 
   let buttonDelete = document.createElement("button");
   buttonDelete.classList.add("button");
-  buttonDelete.classList.add("is-danger");
+  buttonDelete.classList.add("ms-secondary");
   buttonDelete.textContent = "Delete";
   buttonDelete.onclick = () => deleteToken(token.uid);
 

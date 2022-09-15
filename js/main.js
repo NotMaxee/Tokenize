@@ -37,6 +37,16 @@ document.addEventListener("DOMContentLoaded", () => {
     ui.buttonCancelAdjust.onclick = adjustModal.cancel;
     ui.buttonApplyAdjust.onclick  = adjustModal.apply;
 
+    // UI elements - lightswitch.
+    ui.buttonLightswitch.onclick = switchLights;
+
+    // Apply preferred colour scheme on load.
+    if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        setColourTheme("dark");
+    } else {
+        setColourTheme("light");
+    }
+
     console.log("Tokenize initialized. Let's get cooking!");
 });
 
@@ -63,6 +73,7 @@ function updateAdjustToken(e) {
 
 function updateDefaultTokenBackground(e) {
     config.setDefaultTokenBackground(ui.inputBackgroundColour.value);
+    ui.updateColourInput();
 }
 
 // UI handlers - input / buttons.
@@ -107,4 +118,19 @@ function downloadTokens() {
  */
 function deleteTokens() {
     tokenize.deleteAllTokens();
+}
+
+/**
+ * Switch between dark and light theme.
+ */
+function switchLights() {
+    if (document.documentElement.getAttribute("data-theme") === "dark") {
+        setColourTheme("light");
+    } else {
+        setColourTheme("dark");
+    }
+}
+
+function setColourTheme(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
 }
