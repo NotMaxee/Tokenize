@@ -18,7 +18,7 @@ Here's a list of the things Tokenize does:
 * Generate neat tokens with a transparent border.
 * Generate multiple tokens at once by selecting more than one image.
 * Download generate tokens one by one or in a single ZIP file.
-* Manually adjust the position and zoom of token art.
+* Manually adjust the position and zoom of token art, even on mobile.
 * Set a default background colour for transparent images.
 * Make you look pretty snazzy.
 
@@ -27,7 +27,6 @@ And here's a few things it doesn't (currently) do:
 * Remember your settings.
 * Allow you to set a custom background image for transparent tokens.
 * Allow you to pick from different token borders.
-* Mobile support somewhat works, but I recommend against it.
 * Improve your rolls.
 
 ## Attributions
