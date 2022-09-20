@@ -31,9 +31,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // UI elements - token adjustment.
     ui.rangeAdjust.oninput        = adjustModal.updateZoom;
+    
     ui.canvasAdjust.onmousedown   = adjustModal.startGrab;
     ui.canvasAdjust.onmouseup     = adjustModal.stopGrab;
     ui.canvasAdjust.onmouseleave  = adjustModal.stopGrab;
+
+    ui.canvasAdjust.ontouchstart  = adjustModal.startTouch;
+    ui.canvasAdjust.ontouchend    = adjustModal.stopTouch;
+    ui.canvasAdjust.ontouchcancel = adjustModal.stopTouch;
+
     ui.buttonCancelAdjust.onclick = adjustModal.cancel;
     ui.buttonApplyAdjust.onclick  = adjustModal.apply;
 

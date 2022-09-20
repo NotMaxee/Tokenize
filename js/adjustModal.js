@@ -9,6 +9,7 @@ import * as utils from "./utils.js";
  */
 export function show() {
   ui.modalAdjust.classList.remove("invisible");
+  document.body.style.overflow = "hidden";
 }
 
 /**
@@ -16,6 +17,7 @@ export function show() {
  */
 export function hide() {
   ui.modalAdjust.classList.add("invisible");
+  document.body.style.overflow = "auto";
 }
 
 /**
@@ -87,6 +89,40 @@ export function stopGrab(e) {
   ui.canvasAdjust.removeEventListener("mousemove", handleGrab, false);
 }
 
+// Rudimentary touch support. //////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Event handler that processes new touches.
+ * @param {*} e 
+ * @returns 
+ */
+export function startTouch(e) {
+  e.preventDefault();
+  if (touchIdentifier != null) {
+    return;
+  }
+
+  let touch = e.touches[0];
+  touchIdentifier = touch.identifier;
+  touchPos = {x: touch.clientX, y: touch.clientY};
+  ui.canvasAdjust.addEventListener("touchmove", handleTouch);
+}
+
+/**
+ * Event handler that processes ending touches.
+ * @param {TouchEvent} e The touch event to process.
+ */
+export function stopTouch(e) {
+  e.preventDefault();
+  let touch = getTrackedTouchFromList(e.changedTouches);
+  if (touch == null) { return; }
+
+  touchIdentifier = null;
+  touchPos = {x: 0, y: 0};
+  ui.canvasAdjust.removeEventListener("touchmove", handleTouch);
+}
+
 // Private variables and functions. ////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 var callbackApply = null;
@@ -96,6 +132,11 @@ var imageAdjusted; // The zoomed variant of the image.
 
 var zoom = 0; // The current zoom (0% to 150%).
 var grab = { x: 0, y: 0 };
+
+// The touch system keeps track of multiple touches at a time,
+// but for adjusting the image position we only care about one.
+var touchIdentifier = null;
+var touchPos = {x:0, y:0};
 
 var rootX, rootY; // Root position of the token mask.
 var offsetX, offsetY; // Current offset of the image from canvas root.
@@ -131,6 +172,45 @@ function handleNewImage(newImage) {
 
   updateCanvas();
 }
+
+/**
+ * Get the currently tracked touch from a list of touches.
+ * 
+ * The tracked touch is identified using it the touchIdentifier var.
+ * @param {*} touches A list of touches.
+ * @returns The tracked touch, or null if it was not found.
+ */
+ function getTrackedTouchFromList(touches) {
+  for (let i=0; i<touches.length; i++) {
+    if (touches[i].identifier == touchIdentifier) {
+      return touches[i];
+    }
+  }
+  return null;
+}
+
+/**
+ * Event handler that processes touch movement.
+ * @param {TouchEvent} e The touch event to process.
+ */
+function handleTouch(e) {
+  e.preventDefault();
+  if (image == null) {
+    return;
+  }
+
+  let touch = getTrackedTouchFromList(e.changedTouches);
+  if (touch == null) { return; }
+
+  offsetX += touch.clientX - touchPos.x;
+  offsetY += touch.clientY - touchPos.y;
+  touchPos = {x: touch.clientX, y: touch.clientY};
+
+  // Ensure grabbing doesn't pull the image out of frame.
+  sanitizeOffset();
+  updateCanvas();
+}
+
 
 /**
  * Handle mouse movement while the adjustent canvas is grabbed.

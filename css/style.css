@@ -38,7 +38,7 @@ html:not([data-theme="dark"]) .show-on-dark {
   justify-content: center;
   align-items: center;
 
-  overflow: auto;
+  overflow: hidden;
 
   background-color: rgba(0, 0, 0, 0.5);
 }
